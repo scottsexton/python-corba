@@ -1,0 +1,48 @@
+An example of how to use CORBA in python. 
+
+1) Download OmniORB and OmniORBpy extension:
+    $> wget http://downloads.sourceforge.net/project/omniorb/omniORB/omniORB-4.1.6/omniORB-4.1.6.tar.bz2
+    $> wget http://downloads.sourceforge.net/project/omniorb/omniORBpy/omniORBpy-3.6/omniORBpy-3.6.tar.bz2
+
+2) Extract OmniORB and OmniORBpy:
+    $> tar -xjvf omniORB-4.1.6.tar.bz2
+    $> tar -xjvf omniORBpy-3.6.tar.bz2
+
+3) Install OmniOrb (installs to /usr/local by default):
+    $> mkdir omniORB-4.1.6/build
+    $> cd omniORB-4.1.6/build
+    $> ../configure
+    $> make
+    $> sudo make install
+
+4) Install OmniOrbPY (with path to your virtualenv, which you really should use):
+    $> cd -
+    $> mkdir omniORBpy-3.6/build
+    $> cd omniORBpy-3.6/build
+    $> ../configure --prefix=<path-to-your-virtualenv> --with-omniorb=/usr/local (or wherever you put it in step 3)
+    $> make
+    $> make install
+
+5) Extract the examples archive attached to this e-mail:
+    $> tar -xzvf corba_python_example.tar.gz
+
+6) Switch to your virtualenv and compile the IDL file using OmniORB:
+    $> cd corba_python_example
+    $> workon <myvirtualenv>
+    (myvirtualenv) $> omniidl -bpython philosophy.idl
+
+7) Run the server:
+    (myvirtualenv) $> python corba_server.py &
+This will output the crazy corba IOR connection string you need to locate the resource. Copy it.
+
+8) Open a python shell and execute:
+    (myvirtualenv) $> python
+    >>> from corba_client import PhilosophyClient
+    >>> pc = PhilosophyClient("<paste_the_IOR_connection_string>")
+    >>> pc.philosophize()
+    "The unexamined lie is not worth living" - Socrates (470-399 BC)
+
+    >>> pc.philosophize()
+    "The world is my representation." - Arthur Schopenhauer (1788-1860)
+
+The philosophize() method fires off the call to the server over CORBA and prints the random bit of wisdom that's returned. You'll never use REST/JSON again ;)
