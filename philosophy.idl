@@ -1,0 +1,6 @@
+// philosophy.idl -- the interface definition
+module Philosophy {
+  interface PhilosophyServer {
+    string philosophize();
+  };
+};
